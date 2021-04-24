@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/api/reservationTime/")
+@RequestMapping("/api/reservationTime/")
 public class ReservationTimeController {
 
     private final ReservationTimeService reservationTimeService;
@@ -31,6 +31,12 @@ public class ReservationTimeController {
     public ResponseEntity<List<ReservationTimeDto>> showAllReservations(){
         return new ResponseEntity<>(reservationTimeService.showAllReservations(), HttpStatus.OK);
     }
+
+    @GetMapping("/simple")
+    public String text(){
+        return "test";
+    }
+
 // ne generam obiectul jSon facand get de pe recordurile din Dto
     @GetMapping("/hackDtoRecords")
     public ResponseEntity<List<ReservationTimeDto>> showDtoRecords(){
@@ -41,7 +47,7 @@ public class ReservationTimeController {
         return new ResponseEntity<>(reservationTimeService.showAllReservations(), HttpStatus.OK);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ReservationTimeDto> getSingleReservationTime(@PathVariable @RequestBody Long id){
         return new ResponseEntity<>(reservationTimeService.showReservationById(id), HttpStatus.OK);
     }
