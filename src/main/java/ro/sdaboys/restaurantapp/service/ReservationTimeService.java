@@ -3,6 +3,7 @@ package ro.sdaboys.restaurantapp.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ro.sdaboys.restaurantapp.converter.ReservationIntervalConverter;
 import ro.sdaboys.restaurantapp.dto.ReservationTimeDto;
 import ro.sdaboys.restaurantapp.exception.ReservationTimeNotFoundException;
 import ro.sdaboys.restaurantapp.model.ReservationTime;
@@ -20,13 +21,16 @@ public class ReservationTimeService {
     private ModelMapper modelMapper;
     private ReservationTimeRepository reservationTimeRepository;
     private ReservationTimeIntervalValidator validator;
+    private ReservationIntervalConverter converter;
 
     @Autowired
     public ReservationTimeService(ReservationTimeRepository reservationTimeRepository,
-                                  ReservationTimeIntervalValidator validator, ModelMapper modelMapper) {
+                                  ReservationTimeIntervalValidator validator, ModelMapper modelMapper,
+                                  ReservationIntervalConverter converter) {
         this.reservationTimeRepository = reservationTimeRepository;
         this.modelMapper = modelMapper;
         this.validator = validator;
+        this.converter = converter;
     }
 
     public List<ReservationTimeDto> showAllReservations() {
@@ -46,11 +50,14 @@ public class ReservationTimeService {
         return mapFromReservationTimeToDto(reservationTime);
     }
 
-    public void createReservation(ReservationTimeDto reservationTimeDto) {
-        ReservationTime reservationTime = mapFromDtoToReservationTime(reservationTimeDto);
+    public ReservationTimeDto createReservation(ReservationTimeDto reservationTimeDto) {
         if (validator.isValid(reservationTimeDto)) {
+            reservationTimeDto = converter.adjustTime(reservationTimeDto);
+            ReservationTime reservationTime = mapFromDtoToReservationTime(reservationTimeDto);
             reservationTimeRepository.save(reservationTime);
         }
+        return reservationTimeDto;
+
     }
 
     private ReservationTime mapFromDtoToReservationTime(ReservationTimeDto reservationTimeDto) {

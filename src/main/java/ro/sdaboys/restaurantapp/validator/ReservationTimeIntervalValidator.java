@@ -15,9 +15,8 @@ public class ReservationTimeIntervalValidator {
         LocalDateTime endTime =  reservationTimeDto.getEndTime();
         // diferenta intre 2 LocalDateTime -> Duration
         Duration duration = Duration.between(startTime, endTime);
-        duration.toHours();
-        System.out.println(duration);
+        // valideaza doar ca diferenta este mai mare de 60
+        return duration.toMinutes() >= 60;
         // testam cu false ca sa nu salveze
-        return false;
     }
 }

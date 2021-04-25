@@ -18,29 +18,29 @@ public class ReservationTimeController {
     private final ReservationTimeService reservationTimeService;
 
     @Autowired
-    public ReservationTimeController(ReservationTimeService reservationTimeService){
+    public ReservationTimeController(ReservationTimeService reservationTimeService) {
         this.reservationTimeService = reservationTimeService;
     }
 
     @PostMapping
-    public ResponseEntity createReservation(@RequestBody ReservationTimeDto reservationTimeDto){
-        reservationTimeService.createReservation(reservationTimeDto);
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity<ReservationTimeDto> createReservation(@RequestBody ReservationTimeDto reservationTimeDto) {
+        return new ResponseEntity<>(reservationTimeService.createReservation(reservationTimeDto),
+                HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ReservationTimeDto>> showAllReservations(){
+    public ResponseEntity<List<ReservationTimeDto>> showAllReservations() {
         return new ResponseEntity<>(reservationTimeService.showAllReservations(), HttpStatus.OK);
     }
 
     @GetMapping("/simple")
-    public String text(){
+    public String text() {
         return "test";
     }
 
-// ne generam obiectul jSon facand get de pe recordurile din Dto
+    // ne generam obiectul jSon facand get de pe recordurile din Dto
     @GetMapping("/hackDtoRecords")
-    public ResponseEntity<List<ReservationTimeDto>> showDtoRecords(){
+    public ResponseEntity<List<ReservationTimeDto>> showDtoRecords() {
         ReservationTimeDto reservationTimeDto = new ReservationTimeDto();
         reservationTimeDto.setStartTime(LocalDateTime.now());
         reservationTimeDto.setEndTime(LocalDateTime.now());
@@ -49,7 +49,7 @@ public class ReservationTimeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReservationTimeDto> getSingleReservationTime(@PathVariable @RequestBody Long id){
+    public ResponseEntity<ReservationTimeDto> getSingleReservationTime(@PathVariable @RequestBody Long id) {
         return new ResponseEntity<>(reservationTimeService.showReservationById(id), HttpStatus.OK);
     }
 
