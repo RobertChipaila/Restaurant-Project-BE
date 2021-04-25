@@ -2,6 +2,7 @@ package ro.sdaboys.restaurantapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.sdaboys.restaurantapp.dto.ReservationTimeDto;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reservationTime/")
+//@RequestMapping("/api/reservationTime/")
 public class ReservationTimeController {
 
     private final ReservationTimeService reservationTimeService;

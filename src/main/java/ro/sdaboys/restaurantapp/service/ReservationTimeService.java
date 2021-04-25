@@ -7,6 +7,7 @@ import ro.sdaboys.restaurantapp.dto.ReservationTimeDto;
 import ro.sdaboys.restaurantapp.exception.ReservationTimeNotFoundException;
 import ro.sdaboys.restaurantapp.model.ReservationTime;
 import ro.sdaboys.restaurantapp.repository.ReservationTimeRepository;
+import ro.sdaboys.restaurantapp.validator.ReservationTimeIntervalValidator;
 
 import java.util.List;
 
@@ -15,14 +16,17 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class ReservationTimeService {
 
-    @Autowired
+
     private ModelMapper modelMapper;
-
     private ReservationTimeRepository reservationTimeRepository;
+    private ReservationTimeIntervalValidator validator;
 
     @Autowired
-    public ReservationTimeService(ReservationTimeRepository reservationTimeRepository) {
+    public ReservationTimeService(ReservationTimeRepository reservationTimeRepository,
+                                  ReservationTimeIntervalValidator validator, ModelMapper modelMapper) {
         this.reservationTimeRepository = reservationTimeRepository;
+        this.modelMapper = modelMapper;
+        this.validator = validator;
     }
 
     public List<ReservationTimeDto> showAllReservations() {
@@ -44,7 +48,9 @@ public class ReservationTimeService {
 
     public void createReservation(ReservationTimeDto reservationTimeDto) {
         ReservationTime reservationTime = mapFromDtoToReservationTime(reservationTimeDto);
-        reservationTimeRepository.save(reservationTime);
+        if (validator.isValid(reservationTimeDto)) {
+            reservationTimeRepository.save(reservationTime);
+        }
     }
 
     private ReservationTime mapFromDtoToReservationTime(ReservationTimeDto reservationTimeDto) {
