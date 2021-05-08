@@ -7,7 +7,9 @@ import ro.sdaboys.restaurantapp.converter.ReservationIntervalConverter;
 import ro.sdaboys.restaurantapp.dto.ReservationTimeDto;
 import ro.sdaboys.restaurantapp.exception.ReservationTimeNotFoundException;
 import ro.sdaboys.restaurantapp.model.ReservationTime;
+import ro.sdaboys.restaurantapp.model.Tables;
 import ro.sdaboys.restaurantapp.repository.ReservationTimeRepository;
+import ro.sdaboys.restaurantapp.repository.TablesRepository;
 import ro.sdaboys.restaurantapp.validator.ReservationTimeIntervalValidator;
 
 import java.util.List;
@@ -22,15 +24,17 @@ public class ReservationTimeService {
     private ReservationTimeRepository reservationTimeRepository;
     private ReservationTimeIntervalValidator validator;
     private ReservationIntervalConverter converter;
+    private TablesRepository tablesRepository;
 
     @Autowired
     public ReservationTimeService(ReservationTimeRepository reservationTimeRepository,
                                   ReservationTimeIntervalValidator validator, ModelMapper modelMapper,
-                                  ReservationIntervalConverter converter) {
+                                  ReservationIntervalConverter converter, TablesRepository tablesRepository) {
         this.reservationTimeRepository = reservationTimeRepository;
         this.modelMapper = modelMapper;
         this.validator = validator;
         this.converter = converter;
+        this.tablesRepository = tablesRepository;
     }
 
     public List<ReservationTimeDto> showAllReservations() {
@@ -54,7 +58,13 @@ public class ReservationTimeService {
         if (validator.isValid(reservationTimeDto)) {
             reservationTimeDto = converter.adjustTime(reservationTimeDto);
             ReservationTime reservationTime = mapFromDtoToReservationTime(reservationTimeDto);
-            reservationTimeRepository.save(reservationTime);
+            Tables table = tablesRepository.findById(reservationTimeDto.getTableId()).orElseThrow();
+            reservationTime.setTables(table);
+            ReservationTime savedResevationTime = reservationTimeRepository.save(reservationTime);
+            // adauga rezervarea curenta la lista totala de rezervari a mesei
+            table.getReservationTimeList().add(savedResevationTime);
+            tablesRepository.save(table);
+
         }
         return reservationTimeDto;
 
