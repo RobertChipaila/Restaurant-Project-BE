@@ -38,20 +38,32 @@ public class ReservationTimeController {
         return "test";
     }
 
-    // ne generam obiectul jSon facand get de pe recordurile din Dto
-    @GetMapping("/hackDtoRecords")
-    public ResponseEntity<List<ReservationTimeDto>> showDtoRecords() {
-        ReservationTimeDto reservationTimeDto = new ReservationTimeDto();
-        reservationTimeDto.setStartTime(LocalDateTime.now());
-        reservationTimeDto.setEndTime(LocalDateTime.now());
-        reservationTimeService.createReservation(reservationTimeDto);
-        return new ResponseEntity<>(reservationTimeService.showAllReservations(), HttpStatus.OK);
-    }
+//    // ne generam obiectul jSon facand get de pe recordurile din Dto
+//    @GetMapping("/hackDtoRecords")
+//    public ResponseEntity<List<ReservationTimeDto>> showDtoRecords() {
+//        ReservationTimeDto reservationTimeDto = new ReservationTimeDto();
+//        reservationTimeDto.setStartTime(LocalDateTime.now());
+//        reservationTimeDto.setEndTime(LocalDateTime.now());
+//        reservationTimeService.createReservation(reservationTimeDto);
+//        return new ResponseEntity<>(reservationTimeService.showAllReservations(), HttpStatus.OK);
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ReservationTimeDto> getSingleReservationTime(@PathVariable @RequestBody Long id) {
         return new ResponseEntity<>(reservationTimeService.showReservationById(id), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReservationTime(@PathVariable Long id) {
+        reservationTimeService.deleteReservationTime(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ReservationTimeDto> updateReservationTime(@PathVariable Long id,
+                                                                    @RequestBody ReservationTimeDto reservationTimeDto) {
+        return new ResponseEntity<ReservationTimeDto>(reservationTimeService.updateReservationTime(id, reservationTimeDto),
+                HttpStatus.OK);
+    }
 
 }

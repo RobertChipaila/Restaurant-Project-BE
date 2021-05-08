@@ -63,4 +63,18 @@ public class ReservationTimeService {
     private ReservationTime mapFromDtoToReservationTime(ReservationTimeDto reservationTimeDto) {
         return modelMapper.map(reservationTimeDto, ReservationTime.class);
     }
+
+    public void deleteReservationTime(Long id) {
+        reservationTimeRepository.deleteById(id);
+    }
+
+    public ReservationTimeDto updateReservationTime(Long id, ReservationTimeDto reservationTimeDto) {
+        ReservationTime reservationTime = reservationTimeRepository.findById(id).orElseThrow(() -> new ReservationTimeNotFoundException("For " +
+                "id + " + id));
+        reservationTime.setStartTime(reservationTimeDto.getStartTime());
+        reservationTime.setEndTime(reservationTimeDto.getEndTime());
+        return mapFromReservationTimeToDto(reservationTimeRepository.save(reservationTime));
+
+    }
+
 }
