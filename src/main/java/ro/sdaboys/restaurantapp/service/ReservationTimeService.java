@@ -55,7 +55,7 @@ public class ReservationTimeService {
     }
 
     public ReservationTimeDto createReservation(ReservationTimeDto reservationTimeDto) {
-        if (validator.isValid(reservationTimeDto)) {
+        if (validator.isValid(reservationTimeDto) && validator.isValidInterval(reservationTimeDto)) {
             reservationTimeDto = converter.adjustTime(reservationTimeDto);
             ReservationTime reservationTime = mapFromDtoToReservationTime(reservationTimeDto);
             Tables table = tablesRepository.findById(reservationTimeDto.getTableId()).orElseThrow();
@@ -64,7 +64,6 @@ public class ReservationTimeService {
             // adauga rezervarea curenta la lista totala de rezervari a mesei
             table.getReservationTimeList().add(savedResevationTime);
             tablesRepository.save(table);
-
         }
         return reservationTimeDto;
 
@@ -86,5 +85,6 @@ public class ReservationTimeService {
         return mapFromReservationTimeToDto(reservationTimeRepository.save(reservationTime));
 
     }
+
 
 }

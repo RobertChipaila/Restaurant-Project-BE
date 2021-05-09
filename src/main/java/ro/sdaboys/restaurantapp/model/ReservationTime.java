@@ -66,4 +66,15 @@ public class ReservationTime {
     public void setTables(Tables tables) {
         this.tables = tables;
     }
+
+    // nu facem toString pentru tables ca sa nu intram intr-un infinite loop -> vezi linia 27
+    @Override
+    public String toString() {
+        return "ReservationTime{" +
+                "id=" + id +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", numberOfReservedSeats=" + numberOfReservedSeats +
+                '}';
+    }
 }
