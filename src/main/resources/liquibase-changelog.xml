@@ -5,5 +5,8 @@
         xmlns:pro="http://www.liquibase.org/xml/ns/pro"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd">
-    <include file="db/changelog/test.sql"/>
+    <include file="db/changelog/ReservationTime.sql"/>
+    <include file="db/changelog/Seats.sql"/>
+    <include file="db/changelog/Tables.sql"/>
+    <include file="db/changelog/ReservationTime_Added_NumberOfSeats_TableId.sql"/>
 </databaseChangeLog>
